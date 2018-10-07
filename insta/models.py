@@ -4,3 +4,5 @@ from django.contrib.auth.models import User
 from tinymce.models import HTMLField
 
 
+class Profile(models.Model):
+    
