@@ -1,0 +1,29 @@
+{%extends 'insta-posts/base.html'%}
+
+{% block content %}
+{{block.super}}
+<div class="container" >
+    <div class="card">
+        <img src="https://www.wonderplugin.com/videos/demo-image0.jpg" alt="Avatar" style="width:100%">
+        <div class="container">
+            <p><strong>swan</strong></p>
+        </div>
+    </div>
+</div>
+<style>
+    .card {
+        box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
+        transition: 1s;
+        width: 60%;
+    }
+    
+    .card:hover {
+        box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2);
+    }
+    
+    .container {
+        padding: 2px 16px;
+    }
+</style>
+
+{% endblock %}
