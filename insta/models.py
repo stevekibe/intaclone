@@ -7,4 +7,10 @@ from tinymce.models import HTMLField
 class Profile(models.Model):
     title = models.CharField(max_length = 60)
     Name = models.TextField()
-    profile_image = models.ImageField(upload_to = 'users')
+    profile_image = models.ImageField(upload_to = 'users/')
+
+    @classmethod
+    def search_by_title(cls,search_term):
+        post = cls.objects.filter(title__icontains=search_term)
+        return post
+
