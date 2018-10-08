@@ -5,6 +5,7 @@ from . import views
 
 urlpatterns=[
     url('^$',views.all_post,name='post'),
+    url(r'^new/post$',views.new_post, name='new-post')
 
 ]
 if settings.DEBUG:
