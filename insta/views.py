@@ -2,6 +2,7 @@ from django.shortcuts import render
 from django.http  import HttpResponse,Http404
 import datetime as dt
 from .models import Profile
+from .forms import NewPostForm
 
 def all_post(request):
     post = Profile.objects.all()
@@ -16,3 +17,7 @@ def search_results(request):
         message = f"{search_term}"
 
         return render(request, 'insta-posts/search.html',{"message":message,"posts":searched_posts})
+
+
+@login_required(login_url='accounts/login')
+def new_post(request):
