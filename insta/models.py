@@ -64,5 +64,10 @@ class Profile(models.Model):
         self.delete()
 
 class Comment(models.Model):
-    comment =
+    comment = HTMLField()
+    pub_date = models.DateTimeField(auto_now_add=True)
+    profile = models.ForeignKey(Profile, on_delete=models.CASCADE, related_name='comments')
+    user = models.ForeignKey(User, on_delete=models.CASCADE,null="True")
 
+    def __str__(self):
+        return self.comment
