@@ -14,10 +14,6 @@ class Profile(models.Model):
     pub_date = models.DateTimeField(auto_now_add=True)
     profile_image = models.ImageField(upload_to = 'users/')
 
-    @classmethod
-    def search_by_title(cls,search_term):
-        post = cls.objects.filter(title__icontains=search_term)
-        return post
 
     @classmethod
     def todays_post(cls):
@@ -38,14 +34,33 @@ class Profile(models.Model):
     def delete_post(self):
         self.delete()
 
-class User(models.Model):
+class Detail(models.Model):
     bio = HTMLField()
     user_image = models.ImageField(upload_to ='users/')
     user = models.OneToOneField(User, on_delete=models.CASCADE,null="True")
 
     @receiver(post_save, sender=User)
-    def create_user_profile(sender,instance,created, **kwrgs):
+    def create_user_detail(sender,instance,created, **kwrgs):
         if created:
-            User.objects.create(user=instance)
+            Detail.objects.create(user=instance)
 
-    
+    @receiver(post_save, sender=User)
+    def save_user_detail(sender, instance, **kwargs):
+        instance.detail.save()
+
+    post_save.connect(save_user_detail,sender=User)
+
+    def save_detail(self):
+        self.save()
+
+    @classmethod
+    def search_detail(cls,name):
+        detail = cls.objects.filter(user__username___icontains=name)
+        return detail
+
+    @classmethod
+    def get_by_id(cls, id):
+        detail = Detail.objects.get(id=id)
+        return detail
+
+
