@@ -5,35 +5,6 @@ from django.db.models.signals import post_save
 from tinymce.models import HTMLField
 from django.dispatch import receiver
 
-
-
-class Profile(models.Model):
-    title = models.CharField(max_length = 60)
-    caption = models.TextField()
-    post = HTMLField()
-    pub_date = models.DateTimeField(auto_now_add=True)
-    profile_image = models.ImageField(upload_to = 'users/')
-
-
-    @classmethod
-    def todays_post(cls):
-        post = cls.objects.filter(title__icontains=search_term)
-        return post
-
-    @classmethod
-    def all_post():
-        post = cls.object.all()
-        return post
-
-    def __str__(self):
-        return self.title
-
-    def save_post(self):
-        self.save()
-
-    def delete_post(self):
-        self.delete()
-
 class Detail(models.Model):
     bio = HTMLField()
     user_image = models.ImageField(upload_to ='users/')
@@ -54,8 +25,8 @@ class Detail(models.Model):
         self.save()
 
     @classmethod
-    def search_detail(cls,name):
-        detail = cls.objects.filter(user__username___icontains=name)
+    def search_detail(cls,search_term):
+        detail = cls.objects.filter(user__username___icontains=search_term)
         return detail
 
     @classmethod
@@ -63,4 +34,35 @@ class Detail(models.Model):
         detail = Detail.objects.get(id=id)
         return detail
 
+
+class Profile(models.Model):
+    title = models.CharField(max_length = 60)
+    caption = models.TextField()
+    post = HTMLField()
+    pub_date = models.DateTimeField(auto_now_add=True)
+    profile_image = models.ImageField(upload_to = 'users/')
+    detail = models.ForeignKey(Detail, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+
+    @classmethod
+    def todays_post(cls):
+        post = cls.objects.filter(title__icontains=search_term)
+        return post
+
+    @classmethod
+    def all_post():
+        post = cls.object.all()
+        return post
+
+    def __str__(self):
+        return self.title
+
+    def save_post(self):
+        self.save()
+
+    def delete_post(self):
+        self.delete()
+
+class Comment(models.Model):
+    comment =
 
