@@ -2,9 +2,10 @@ from django.shortcuts import render,redirect
 from django.http  import HttpResponse,Http404
 from django.contrib.auth.decorators import login_required
 import datetime as dt
-from .models import Profile,Detail,Comment
+from .models import Image,Detail,Comment,Likes
 from .forms import NewPostForm
 
+@login_required(login_url='/accounts/login/')
 def all_post(request):
     post = Profile.objects.all()
 
