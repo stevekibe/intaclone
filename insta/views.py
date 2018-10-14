@@ -42,6 +42,13 @@ def new_post(request):
         form = NewPostForm()
     return render(request, 'new_post.html',{"form":form})
 
+@login_required(login_url='/accounts/login/')
+def like_post(request):
+    image = get_object_or_404(Image, id=request.POST.get('image_id'))
+    image.likes.add(request.user)
+    return redirect('landing')
+
+
 @login_required(login_url='accounts/login')
 def detail(request, user_id):
     title = "Profile"
@@ -80,7 +87,7 @@ def add_comment(request, image_id):
             comment.save()
     return redirect('all_post')
 
-def like_post(request, image_id):
+def like(request, image_id):
    current_user = request.user
    liked_post = Image.objects.get(id=image_id)
    new_like, created = Likes.objects.get_or_create(user_like=current_user, liked_post=liked_post)
