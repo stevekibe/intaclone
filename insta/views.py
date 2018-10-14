@@ -1,21 +1,28 @@
 from django.shortcuts import render,redirect
 from django.http  import HttpResponse,Http404
+from django.contrib.auth import login, authenticate
 from django.contrib.auth.decorators import login_required
 import datetime as dt
+from django.contrib.auth.models import User
 from .models import Image,Detail,Comment,Likes
-from .forms import NewPostForm
+from .forms import NewPostForm, SignupForm,DetailForm,CommentsForm
+from friendship.models import Friend, Follow, Block
 
 @login_required(login_url='/accounts/login/')
 def all_post(request):
-    post = Profile.objects.all()
+    post = Image.objects.all()
 
     return render (request, "insta-posts/index.html", {"post":post})
 
 def search_results(request):
 
-    if 'post' in request.GET and request.GET["post"]:
-        search_term = request.GET.get("post")
+    if 'username' in request.GET and request.GET["username"]:
+        search_term = request.GET.get("username")
+        searched_detail = User.objects.filter(username__icontains=search_term)
         message = f"{search_term}"
+        details = User.objects.all()
+        people = Follow.objects.following(request.user)
+        print(details)
 
         return render(request, 'insta-posts/search.html',{"message":message,"posts":searched_posts})
 
@@ -41,10 +48,57 @@ def detail(request, user_id):
     images = Image.get_image_by_id(id= user_id).order_by('-posted_on')
     details = User.objects.get(id=user_id)
     users = User.objects.get(id=user_id)
-    follow = len(Follow.objects.followers(users)))
+    follow = len(Follow.objects.followers(users))
     following = len(Follow.objects.following(users))
     people = Follow.objects.following(request.user)
 
     return render(request, 'detail/detail.html',{'title':title,"images":images,"follow":follow, "following":following,"profiles":profiles,"people":people})
 
-@
+@login_required(login_url='accounts/login/')
+def edit_detail(request):
+    current_user = request.user
+    detail = Detail.objects.get(user= request.user)
+    if request.method == 'POST':
+        form = DetailForm(request.POST, request.FILES)
+        if form.is_valid():
+            detail = form.save(commit=False)
+            detail.save()
+        return redirect('all_post')
+    else:
+        form = DetailForm()
+    return render(request, 'detail/edit-detail.html', {"form": form,})
+
+@login_required(login_url='/accounts/login/')
+def add_comment(request, image_id):
+    images = get_object_or_404(Image, pk=image_id)
+    if request.method == 'POST':
+        form = CommentsForm(request.POST)
+        if form.is_valid():
+            comment = form.save(commit=False)
+            comment.user = request.user
+            comment.image = images
+            comment.save()
+    return redirect('all_post')
+
+def like_post(request, image_id):
+   current_user = request.user
+   liked_post = Image.objects.get(id=image_id)
+   new_like, created = Likes.objects.get_or_create(user_like=current_user, liked_post=liked_post)
+   new_like.save()
+
+   return redirect('all_post')
+
+@login_required(login_url='/accounts/login/')
+def follow(request,user_id):
+    other_user = User.objects.get(id = user_id)
+    follow = Follow.objects.add_follower(request.user, other_user)
+
+    return redirect('all_post')
+
+@login_required(login_url='/accounts/login/')
+def unfollow(request,user_id):
+    other_user = User.objects.get(id = user_id)
+
+    follow = Follow.objects.remove_follower(request.user, other_user)
+
+    return redirect('all_post')

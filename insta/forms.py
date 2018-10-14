@@ -22,5 +22,5 @@ class DetailForm(forms.ModelForm):
 
 class CommentsForm(forms.ModelForm):
     class Meta:
-        model = Comments
+        model = Comment
         fields = [ 'comment' ]
