@@ -35,33 +35,39 @@ class Detail(models.Model):
         return detail
 
 
-class Profile(models.Model):
-    title = models.CharField(max_length = 60)
-    caption = models.TextField()
-    post = HTMLField()
+class Image(models.Model):
+    post = models.ImageField(upload_to = 'users/', blank=True)
+    caption = HTMLField()
     pub_date = models.DateTimeField(auto_now_add=True)
-    profile_image = models.ImageField(upload_to = 'users/')
     detail = models.ForeignKey(Detail, on_delete=models.CASCADE)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
 
-    @classmethod
-    def todays_post(cls):
-        post = cls.objects.filter(title__icontains=search_term)
-        return post
+    class Meta:
+        ordering = ['pub_date']
 
-    @classmethod
-    def all_post():
-        post = cls.object.all()
-        return post
-
-    def __str__(self):
-        return self.title
-
-    def save_post(self):
+    def save_image(self):
         self.save()
 
-    def delete_post(self):
+    def delete_image():
         self.delete()
+
+    @classmethod
+    def get_images(cls):
+        images = Image.objects.all()
+        return images
+
+    @property
+    def count_likes(self):
+        likes = self.likes.count()
+        return likes
+    
+    @classmethod
+    def get_image_by_id(cls, id):
+        image = Image.objects.filter(user_id=id).all()
+        return image
+
+    def __str__(self):
+        return self.caption
 
 class Comment(models.Model):
     comment = HTMLField()
@@ -84,3 +90,15 @@ class Comment(models.Model):
 
     def __str__(self):
         return self.comment 
+
+class Likes(models.Model):
+    user_like = models.ForeignKey(User, on_delete=models.CASCADE, related_name='likes')
+    liked_post =models.ForeignKey(Image, on_delete=models.CASCADE, related_name='likes')
+
+    def save_like(self):
+        self.save()
+
+    def __str__(self):
+        return self.user_like
+
+

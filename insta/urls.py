@@ -6,6 +6,8 @@ from . import views
 urlpatterns=[
     url('^$',views.all_post,name='post'),
     url(r'^new/post$',views.new_post, name='new-post')
+    url(r'^likes/$', view.like_post, name='like')
+    url()
 
 ]
 if settings.DEBUG:
