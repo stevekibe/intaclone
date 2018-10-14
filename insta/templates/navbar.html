@@ -2,7 +2,7 @@
   <div class="container">
     <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
       <ul class="col-sm-4 col-md-4 col-xs-4 col-lg-4 nav navbar-nav">
-        <li><a href="/"><img src="/static/img/logo.png" style="width:40px"></a></li>
+        <li><a href="/"><img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR77E2NJ-HnqV8lXwqU3Vr3AqIUaEhZA9l5r783fm5_oSRf5Vkv" style="width:30px"></a></li>
         <li class="line"><a href="/"></a></li>
         <li><a href="/" class="insta">Instagram</a></li>
       </ul>
@@ -13,9 +13,9 @@
         </form>
      <ul class="col-sm-3 col-md-3 col-xs-4 col-lg-4 nav navbar-nav" style="float:right;">
           {% if user.is_authenticated %}
-        <li><a href="{%url 'new-post'%}"><img src="/static/img/explore.png" style="width:30px"></a></li>
-        <li><a href="#"><img src="/static/img/heart.png" style="width:30px"></a></li>
-        <li><a href="/user/{{user.id}}"><img src="/static/img/pro.png" style="width:30px"></a></li>
+        <li><a href="{%url 'new-post'%}"><img src="https://cdn0.iconfinder.com/data/icons/pixon-1/24/arrow_up_upload-512.png" style="width:30px"></a></li>
+        <li><a href="#"><img src="https://image.freepik.com/free-icon/heart-shape-outline_318-41940.jpg" style="width:30px"></a></li>
+        <li><a href="/user/{{user.id}}"><img src="https://static.thenounproject.com/png/630729-200.png" style="width:30px"></a></li>
           {% endif %}
       </ul>
     </div>
