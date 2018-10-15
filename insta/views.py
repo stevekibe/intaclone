@@ -1,4 +1,4 @@
-from django.shortcuts import render,redirect
+from django.shortcuts import render,redirect,get_object_or_404
 from django.utils.encoding import force_bytes, force_text
 from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
 from django.template.loader import render_to_string
@@ -8,7 +8,7 @@ from django.contrib.auth.decorators import login_required
 import datetime as dt
 from django.contrib.auth.models import User
 from .models import Image,Detail,Comment,Likes
-from .forms import NewPostForm, SignupForm,DetailForm,CommentsForm
+from .forms import ImageForm, SignupForm,DetailForm,CommentsForm
 from friendship.models import Friend, Follow, Block
 
 @login_required(login_url='/accounts/login/')
@@ -37,26 +37,23 @@ def search_results(request):
 @login_required(login_url='accounts/login')
 def new_post(request):
     current_user = request.user
-    detail = Detail.objects.all()
-    for detail in detail:
-        if request.method == 'POST':
-            form = NewPostForm(request.POST, request.FILES)
-            if form.is_valid():
-                post = form.save(commit=False)
-                post.detail = detail
-                post.editor = current_user
-                post.save()
-            return redirect ('all_post')
+    if request.method == 'POST':
+        form = ImageForm(request.POST, request.FILES)
+        if form.is_valid():
+            post = form.save(commit=False)
+            post.user = current_user
+            post.save()
+        return redirect ('post')
 
-        else:
-            form = NewPostForm()
+    else:
+        form = ImageForm()
     return render(request, 'new_post.html', {"form":form})
 
 @login_required(login_url='/accounts/login/')
 def like_post(request):
     image = get_object_or_404(Image, id=request.POST.get('image_id'))
     image.likes.add(request.user)
-    return redirect('all_post')
+    return redirect('post')
 
 
 @login_required(login_url='accounts/login')
@@ -80,7 +77,7 @@ def edit_detail(request):
         if form.is_valid():
             detail = form.save(commit=False)
             detail.save()
-        return redirect('all_post')
+        return redirect('post')
     else:
         form = DetailForm()
     return render(request, 'detail/edit-detail.html', {"form": form,})
@@ -95,7 +92,7 @@ def add_comment(request, image_id):
             comment.user = request.user
             comment.image = images
             comment.save()
-    return redirect('all_post')
+    return redirect('post')
 
 def like(request, image_id):
    current_user = request.user
@@ -103,14 +100,14 @@ def like(request, image_id):
    new_like, created = Likes.objects.get_or_create(user_like=current_user, liked_post=liked_post)
    new_like.save()
 
-   return redirect('all_post')
+   return redirect('post')
 
 @login_required(login_url='/accounts/login/')
 def follow(request,user_id):
     other_user = User.objects.get(id = user_id)
     follow = Follow.objects.add_follower(request.user, other_user)
 
-    return redirect('all_post')
+    return redirect('post')
 
 @login_required(login_url='/accounts/login/')
 def unfollow(request,user_id):
@@ -118,4 +115,4 @@ def unfollow(request,user_id):
 
     follow = Follow.objects.remove_follower(request.user, other_user)
 
-    return redirect('all_post')
+    return redirect('post')

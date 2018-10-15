@@ -3,7 +3,7 @@ from django import forms
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
 
-class NewPostForm(forms.ModelForm):
+class ImageForm(forms.ModelForm):
     class Meta:
         model = Image
         exclude = ['pub_date','user', 'detail', 'likes']

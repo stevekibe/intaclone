@@ -14,9 +14,14 @@
 {%endblock%}  
 
 </head>
-
+{%block content%}
 <body>
   <div class="container">
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
 
   <form  action="{%url 'new-post'%}" method="post" enctype="multipart/form-data">
     {%csrf_token%}
@@ -26,5 +31,9 @@
   </form>
   </div>
 </body>
+{%endblock%}
+{% block scripts %}
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+{% bootstrap_javascript %} {% endblock %}
 
 </html>

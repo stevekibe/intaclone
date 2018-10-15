@@ -17,8 +17,12 @@
   {% endif %}
 
   {% block styles %}
-    {% bootstrap_css %}
-    <link rel="stylesheet" href="{% static 'css/basenews.css' %}">
+  {% bootstrap_css %}
+  <style>
+  body{
+    background-color: #fafafa;
+  }
+</style>
   {% endblock %}
 
 

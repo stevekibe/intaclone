@@ -6,6 +6,11 @@
 
 
 {% block content %}
+<br>
+<br>
+<br>
+<br>
+<br>
 <div class="container">
     <div class="col-md-4" id="details">
         <img src="https://cdn0.iconfinder.com/data/icons/finance-vol-2-4/48/77-512.png" alt="avatar" class="img-circle">
@@ -68,22 +73,7 @@
 
 {% endif %}
 </div>
-
-{% endblock %}
- {% block scripts %}
- {{block.super}}
-    <script>
-        $(document).ready(function(){
-            $("#view").click(function(){
-                $(".well").toggle();  
-        
-            });
-         
-        });
-    </script>
-
-  {% endblock %}
-  <style>
+<style>
         details{
             margin-top: 30px;
             margin-left: 111px;
@@ -109,3 +99,19 @@
         }
         
     </style>
+
+{% endblock %}
+ {% block scripts %}
+ {{block.super}}
+    <script>
+        $(document).ready(function(){
+            $("#view").click(function(){
+                $(".well").toggle();  
+        
+            });
+         
+        });
+    </script>
+
+  {% endblock %}
+  

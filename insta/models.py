@@ -7,7 +7,7 @@ from django.dispatch import receiver
 
 class Detail(models.Model):
     bio = HTMLField()
-    user_image = models.ImageField(upload_to ='users/')
+    user_image = models.ImageField(upload_to ='images/')
     user = models.OneToOneField(User, on_delete=models.CASCADE,null="True")
 
     @receiver(post_save, sender=User)
@@ -36,10 +36,10 @@ class Detail(models.Model):
 
 
 class Image(models.Model):
-    post = models.ImageField(upload_to = 'users/', blank=True)
+    post = models.ImageField(upload_to = 'images/', blank=True)
     caption = HTMLField()
     pub_date = models.DateTimeField(auto_now_add=True)
-    detail = models.ForeignKey(Detail, on_delete=models.CASCADE)
+    detail = models.ForeignKey(Detail, on_delete=models.CASCADE,null=True)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
 
     class Meta:
@@ -72,7 +72,7 @@ class Image(models.Model):
 class Comment(models.Model):
     comment = HTMLField()
     pub_date = models.DateTimeField(auto_now_add=True)
-    detail = models.ForeignKey(Detail, on_delete=models.CASCADE, related_name='comments')
+    detail = models.ForeignKey(Detail, on_delete=models.CASCADE, related_name='comments',null=True)
     user = models.ForeignKey(User, on_delete=models.CASCADE,null="True")
     class Meta:
         ordering = ['pub_date']

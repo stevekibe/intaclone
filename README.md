@@ -4,7 +4,7 @@ This is a clone of instagram and has the basic functionality of instagram
 For developing and testing my app on your machine you must follow the following steps
 
 You must gitclone the project from github by typing git clone https://github.com/stevekibe/instaclone.git on your terminal.
-You must create a database for the app NB: I have used postgress sql so you can use any db to use.
+You must create a database for the app    NB: I have used postgress sql so you can use any db to use.
 Then you must change the settings.py so as to configure your db .
 If you are intrested to deploy use the following link to deploy your project on heroku https://github.com/Benard18/Deployment_to_heroku_django
 # Prerequisites
