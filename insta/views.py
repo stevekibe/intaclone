@@ -10,9 +10,13 @@ from friendship.models import Friend, Follow, Block
 
 @login_required(login_url='/accounts/login/')
 def all_post(request):
-    post = Image.objects.all()
+    images = Image.get_images().order_by('-pub_date')
+    details = User.objects.all()
+    people = Follow.objects.following(request.user)
+    comments = Comment.objects.all()
+    likes = Likes.objects.all()
 
-    return render (request, "insta-posts/index.html", {"post":post})
+    return render (request, "insta-posts/index.html", {"images":images,"details":details,"people":people, "comments":comments,"likes":likes})
 
 def search_results(request):
 
@@ -29,37 +33,39 @@ def search_results(request):
 
 @login_required(login_url='accounts/login')
 def new_post(request):
-    current_user = request.user
-    if request.method == 'POST':
-        form = NewPostForm(request.POST, request.FILES)
-        if form.is_valid():
-            post = form.save(commit=False)
-            post.editor = current_user
-            post.save()
-        return redirect ('all_post')
+    detail = Detail.objects.all()
+    for detail in detail:
+        if request.method == 'POST':
+            form = NewPostForm(request.POST, request.FILES)
+            if form.is_valid():
+                post = form.save(commit=False)
+                post.detail = detail
+                post.editor = current_user
+                post.save()
+            return redirect ('all_post')
 
-    else:
-        form = NewPostForm()
-    return render(request, 'new_post.html',{"form":form})
+        else:
+            form = NewPostForm()
+    return render(request, 'new_post.html', )
 
 @login_required(login_url='/accounts/login/')
 def like_post(request):
     image = get_object_or_404(Image, id=request.POST.get('image_id'))
     image.likes.add(request.user)
-    return redirect('landing')
+    return redirect('all_post')
 
 
 @login_required(login_url='accounts/login')
 def detail(request, user_id):
     title = "Profile"
-    images = Image.get_image_by_id(id= user_id).order_by('-posted_on')
+    images = Image.get_image_by_id(id= user_id).order_by('pub_date')
     details = User.objects.get(id=user_id)
     users = User.objects.get(id=user_id)
     follow = len(Follow.objects.followers(users))
     following = len(Follow.objects.following(users))
     people = Follow.objects.following(request.user)
 
-    return render(request, 'detail/detail.html',{'title':title,"images":images,"follow":follow, "following":following,"profiles":profiles,"people":people})
+    return render(request, 'detail/detail.html',{'title':title,"images":images,"follow":follow, "following":following,"details":details,"people":people})
 
 @login_required(login_url='accounts/login/')
 def edit_detail(request):
