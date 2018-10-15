@@ -7,12 +7,12 @@
 
 {% block content %}
 <div class="container">
-   <div class="col-md-4" id="details">
+    <div class="col-md-4" id="details">
         <img src="https://cdn0.iconfinder.com/data/icons/finance-vol-2-4/48/77-512.png" alt="avatar" class="img-circle">
     </div>
     <ul class="list-inline">
         <li class="list-inline-item" id="name">
-        <span class="font-weight-bold">{{detail.username}}</span>
+            <span class="font-weight-bold">{{detail.username}}</span>
         </li>
         {% if detail.username == user.username %}
         <li class="list-inline-item">
@@ -68,32 +68,7 @@
 
 {% endif %}
 </div>
-<style>
-    details{
-        margin-top: 30px;
-        margin-left: 111px;
-    }
-    .img-circle{
-        border: solid #ccc 2px;
-        height: 60px;
-    }
-    #name{
-        font-size: 20px;
-        font-weight: bolder
-       
-    }
-    #editbtn{
-        margin-left: -20px; 
-    }
-    button{
-        padding: 4px;
-    }
-    .list-inline{
-        margin-top: 20px;
-        font-weight: bolder;
-    }
-    
-</style>
+
 {% endblock %}
  {% block scripts %}
  {{block.super}}
@@ -108,3 +83,29 @@
     </script>
 
   {% endblock %}
+  <style>
+        details{
+            margin-top: 30px;
+            margin-left: 111px;
+        }
+        .img-circle{
+            border: solid #ccc 2px;
+            height: 60px;
+        }
+        #name{
+            font-size: 20px;
+            font-weight: bolder
+           
+        }
+        #editbtn{
+            margin-left: -20px; 
+        }
+        button{
+            padding: 4px;
+        }
+        .list-inline{
+            margin-top: 20px;
+            font-weight: bolder;
+        }
+        
+    </style>

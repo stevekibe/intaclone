@@ -12,7 +12,8 @@ urlpatterns=[
     url(r'^search/$', views.search_results, name='search-user'),
     url(r'^comment/(?P<image_id>\d+)', views.add_comment, name='comment'),
     url(r'^like/(?P<image_id>\d+)', views.like, name='like'),
-
+    url(r'^follow/(\d+)$', views.follow, name='follow'),
+    url(r'^unfollow/(\d+)$', views.unfollow, name='unfollow'),
 
 ]
 if settings.DEBUG:

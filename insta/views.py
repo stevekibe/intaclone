@@ -1,4 +1,7 @@
 from django.shortcuts import render,redirect
+from django.utils.encoding import force_bytes, force_text
+from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
+from django.template.loader import render_to_string
 from django.http  import HttpResponse,Http404
 from django.contrib.auth import login, authenticate
 from django.contrib.auth.decorators import login_required
@@ -28,11 +31,12 @@ def search_results(request):
         people = Follow.objects.following(request.user)
         print(details)
 
-        return render(request, 'insta-posts/search.html',{"message":message,"posts":searched_posts})
+        return render(request, 'insta-posts/search.html',{"message":message,"usernames":searched_detail,"details":details})
 
 
 @login_required(login_url='accounts/login')
 def new_post(request):
+    current_user = request.user
     detail = Detail.objects.all()
     for detail in detail:
         if request.method == 'POST':
@@ -46,7 +50,7 @@ def new_post(request):
 
         else:
             form = NewPostForm()
-    return render(request, 'new_post.html', )
+    return render(request, 'new_post.html', {"form":form})
 
 @login_required(login_url='/accounts/login/')
 def like_post(request):
